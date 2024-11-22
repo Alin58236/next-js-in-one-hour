@@ -13,6 +13,8 @@ const  page = async({ params }: { params: { id: string } }) => {
 
         <p>poti folosi si export default function (edf), si react component (rafce)!! Vezi pe  <u><a href='https://github.com/Alin58236/next-js-in-one-hour/blob/main/first-basic-nextjs-app/src/app/product/%5Bid%5D/page.tsx'>github</a></u></p>
 
+        <p>Este recomandat totusi sa folosesti edf pentru ca daca folosesti rafce esti obligat sa numesti componenta react ca si fisierul (page)</p>
+
         <p> id : {id}</p>
 
     </div>
