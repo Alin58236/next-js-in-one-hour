@@ -20,7 +20,7 @@ export default function UsersClient() {
 
         async function fetchUsers() {
             try {
-                const response = await fetch("https://jsonplaceholder.typicode.com/users1231312");
+                const response = await fetch("https://jsonplaceholder.typicode.com/users");
                 if (!response.ok) throw new Error("Something wrong with the API");
                 const data = await response.json();
                 setUsers(data);
