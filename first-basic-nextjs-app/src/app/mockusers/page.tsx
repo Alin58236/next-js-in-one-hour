@@ -1,5 +1,5 @@
 import { revalidatePath } from "next/cache";
-
+import { auth, currentUser } from "@clerk/nextjs/server";
 
 type MockUser = {
   id: number;
@@ -7,6 +7,16 @@ type MockUser = {
 };
 
 export default async function UsersMock() {
+
+  //these methods are provided by clerk, however in the client methods we can't "await" -> see solution in the next commit
+  const authObj = await auth();
+  const userObj = await currentUser();
+
+  console.log({
+    authObj,
+    userObj
+  });
+
   await new Promise((resolve) => setTimeout(resolve, 500));
   const response = await fetch(
     "https://6743bccbb7464b1c2a65b21c.mockapi.io/users"
@@ -14,25 +24,24 @@ export default async function UsersMock() {
 
   const users = await response.json();
 
-  async function addUser(formData : FormData) {
-    
-    "use server" //yes, we can also define server actions at the function level
+  async function addUser(formData: FormData) {
+    "use server"; //yes, we can also define server actions at the function level
 
     const name = formData.get("name");
     const res = await fetch(
-        "https://6743bccbb7464b1c2a65b21c.mockapi.io/users", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({name})
-        }
-      );
-      const newUser = await res.json();
-      revalidatePath("/mockusers")
-      console.log(newUser);
+      "https://6743bccbb7464b1c2a65b21c.mockapi.io/users",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name }),
+      }
+    );
+    const newUser = await res.json();
+    revalidatePath("/mockusers");
+    console.log(newUser);
   }
-
 
   return (
     <div className="py-10">
@@ -43,7 +52,13 @@ export default async function UsersMock() {
           required
           className="text-black border p-2 mr-2 br-10 rounded"
         ></input>
-        <button type="submit" className="bg-vmsgreen text-white px-4 py-2 rounded"> Add User </button>
+        <button
+          type="submit"
+          className="bg-vmsgreen text-white px-4 py-2 rounded"
+        >
+          {" "}
+          Add User{" "}
+        </button>
       </form>
 
       <div className="grid grid-cols-4 gap-4 py-10">
